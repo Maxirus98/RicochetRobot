@@ -1,31 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Manage the grid and the interactions with it. Only the owner will be able to use this until the client sends it's answer to the server.
+/// Manage the grid on the server. Spawns the same robots for all players
 /// </summary>
 public class PlacementSystem : MonoBehaviour
 {
     [SerializeField]
-    GameObject mouseIndicator, cellIndicator;
-    [SerializeField]
-    private InputManager inputManager;
-    [SerializeField]
     private Grid grid;
+    [SerializeField]
+    private List<GameObject> robots;
 
-    private void Update()
+    /// <summary>
+    /// Grid max coordinates according to the size of the ground/plane
+    /// </summary>
+    private readonly float gridMaxX = 5f;
+    private readonly float gridMaxY = 5f;
+
+    /// <summary>
+    /// Saved position to make sure two robots are never spawned in the same cell
+    /// </summary>
+    private List<Vector3> usedPositions = new List<Vector3>();
+
+    private void Start()
     {
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        mouseIndicator.transform.position = mousePosition;
-        cellIndicator.transform.position = grid.CellToWorld(gridPosition);
+        InitializeRobotsPosition();
+        Debug.Log("Sarting");
     }
 
-    public Vector3 GetCellPosition()
+    public void InitializeRobotsPosition()
     {
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        return grid.CellToWorld(gridPosition);
+        for (int i=0;i<robots.Count;i++)
+        {
+            var robot = robots[i];
+            SpawnRobot(robot);
+        }
+
+        usedPositions.Clear();
+    }
+
+    public void SpawnRobot(GameObject robot)
+    {
+        float randomX = Random.Range(-gridMaxX, gridMaxX);
+        float randomY = Random.Range(-gridMaxY, gridMaxY);
+        Vector3 spawnPosition = new Vector3(randomX, 0f, randomY);
+
+        foreach (var position in usedPositions)
+        {
+            if (position == spawnPosition)
+            {
+                Debug.Log("Robot position exists, retrying");
+                SpawnRobot(robot);
+                return;
+            }
+        }
+
+        usedPositions.Add(spawnPosition);
+        var robotClone = Instantiate(robot, spawnPosition, Quaternion.identity);
+        var robotPosition = robotClone.transform.position;
+        
+        var cellPosition = grid.WorldToCell(robotPosition);
+        robotClone.transform.position = grid.GetCellCenterWorld(cellPosition);
     }
 }

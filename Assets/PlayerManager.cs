@@ -11,16 +11,31 @@ using UnityEngine;
 public class PlayerManager : NetworkBehaviour
 {
     [SerializeField]
+    private GameObject mouseIndicator, cellIndicator;
+
     private PlacementSystem placementSystem;
+    private InputManager inputManager;
+    private Grid grid;
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) Destroy(this);
+        placementSystem = GameObject.Find("PlacementSystem").GetComponent<PlacementSystem>();
+        inputManager = GameObject.Find("InputManager").GetComponent<InputManager>();
+        grid = GameObject.Find("Grid").GetComponent<Grid>();
+    }
 
     private void Update()
     {
-        if (!IsOwner) return;
         var input = Input.GetMouseButton(0);
-
-        Vector3 cellPosition = placementSystem.GetCellPosition();
-        if(input)
+        if (input)
         {
         }
+
+        // Done by client
+        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+        mouseIndicator.transform.position = mousePosition;
+        cellIndicator.transform.position = grid.CellToWorld(gridPosition);
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class InputManager : MonoBehaviour
     /// </summary>
     [SerializeField]
     private LayerMask placementLayerMask;
+    [SerializeField]
+    private LayerMask robotLayerMask;
 
     private Vector3 lastPosition;
     
@@ -26,5 +29,21 @@ public class InputManager : MonoBehaviour
             lastPosition = hit.point;
         }
         return lastPosition;
+    }
+
+    public GameObject GetSelectedRobot()
+    {
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = camera.nearClipPlane;
+        Ray ray = camera.ScreenPointToRay(mousePos);
+
+        RaycastHit hit;
+        
+        if (Physics.Raycast(ray, out hit, 100, robotLayerMask))
+        {
+            return hit.collider.transform.parent.gameObject;
+        }
+
+        return null;
     }
 }

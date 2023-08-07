@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6195279461349102668}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BlueRobot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 4606194324064401190}
   - component: {fileID: 6776110298460823392}
   - component: {fileID: 5509781651988080889}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

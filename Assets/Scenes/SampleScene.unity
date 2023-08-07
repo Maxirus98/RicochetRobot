@@ -766,6 +766,9 @@ MonoBehaviour:
   placementLayerMask:
     serializedVersion: 2
     m_Bits: 8
+  robotLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1280459140
 GameObject:
   m_ObjectHideFlags: 0

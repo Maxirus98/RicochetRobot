@@ -55,14 +55,14 @@ public class PlayerManager : NetworkBehaviour
         {
             selectedRobot = inputManager.GetSelectedRobot();
             // ONLY VISIBLE TO THE LOCAL CLIENT because you instantiate it on the player network who's a network object only visible to the local client
-            var cloneSelectedRobot = Instantiate(selectedRobot);
-            var mat = cloneSelectedRobot.GetComponentInChildren<Renderer>().material;
-            Color oldColor = mat.color;
-            Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0.5f);
-            mat.SetColor("_Color", newColor);
 
             // clone a temporary "ghost" of the selected robot 
             // move the temporary ghost with a trail following the grid to see the movements
         }
+    }
+
+    private void SpawnRobotIndicators()
+    {
+
     }
 }

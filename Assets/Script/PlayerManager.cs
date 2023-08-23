@@ -1,15 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
 /// PlayerManger will manage the actions of the player for the client.
 /// Therefore, only the Owner will be able to do and see what he's doing until he sends its answer to the server.
 /// </summary>
-public class PlayerManager : NetworkBehaviour
+public class PlayerManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject mouseIndicator, cellIndicator;
@@ -17,32 +12,15 @@ public class PlayerManager : NetworkBehaviour
     private PlacementSystem placementSystem;
     private InputManager inputManager;
     private Grid grid;
-    private NetworkObject networkObject;
 
     [SerializeField]
     private GameObject selectedRobot;
 
-    public override void OnNetworkSpawn()
+    private void Awake()
     {
-        if (!IsOwner) Destroy(this);
         placementSystem = GameObject.Find("PlacementSystem").GetComponent<PlacementSystem>();
         inputManager = GameObject.Find("InputManager").GetComponent<InputManager>();
         grid = GameObject.Find("Grid").GetComponent<Grid>();
-        networkObject = GetComponent<NetworkObject>();
-    }
-
-    private void FixedUpdate()
-    {
-        if (!IsHost) return;
-
-        foreach (var client in NetworkManager.Singleton.ConnectedClients)
-        {
-            if (networkObject.IsNetworkVisibleTo(client.Key) && client.Key != NetworkManager.LocalClientId)
-            {
-                print($"Hide for client with key {client.Key}");
-                networkObject.NetworkHide(client.Key);
-            }
-        }
     }
 
     private void Update()
@@ -51,18 +29,26 @@ public class PlayerManager : NetworkBehaviour
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         mouseIndicator.transform.position = mousePosition;
         cellIndicator.transform.position = grid.CellToWorld(gridPosition);
-        if(Input.GetMouseButtonDown(0))
-        {
-            selectedRobot = inputManager.GetSelectedRobot();
-            // ONLY VISIBLE TO THE LOCAL CLIENT because you instantiate it on the player network who's a network object only visible to the local client
 
-            // clone a temporary "ghost" of the selected robot 
-            // move the temporary ghost with a trail following the grid to see the movements
+        if (Input.GetMouseButton(1))
+        {
+            selectedRobot = null;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if(selectedRobot == null)
+            {
+                selectedRobot = inputManager.GetSelectedRobotIndicator();
+                return;
+            }
+
+            MoveRobotIndicatorToCellPosition(gridPosition);
         }
     }
 
-    private void SpawnRobotIndicators()
+    private void MoveRobotIndicatorToCellPosition(Vector3Int gridPosition)
     {
-
+        selectedRobot.transform.position = grid.GetCellCenterWorld(gridPosition);
     }
 }

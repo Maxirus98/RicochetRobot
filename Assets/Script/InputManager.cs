@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
         return lastPosition;
     }
 
-    public GameObject GetSelectedRobot()
+    public GameObject GetSelectedRobotIndicator()
     {
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = camera.nearClipPlane;
@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour
         
         if (Physics.Raycast(ray, out hit, 100, robotLayerMask))
         {
-            return hit.collider.transform.parent.gameObject;
+            return hit.collider.transform.gameObject;
         }
 
         return null;

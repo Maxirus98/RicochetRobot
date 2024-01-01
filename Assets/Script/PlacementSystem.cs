@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -32,7 +30,7 @@ public class PlacementSystem : MonoBehaviour
 
     public void InitializeRobotsPosition()
     {
-        for (int i=0;i<robots.Count;i++)
+        for (int i = 0; i < robots.Count; i++)
         {
             var robot = robots[i];
             SpawnRobot(robot);

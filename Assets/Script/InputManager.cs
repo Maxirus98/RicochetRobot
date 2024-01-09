@@ -14,6 +14,9 @@ public class InputManager : MonoBehaviour
     private LayerMask robotLayerMask;
     [SerializeField]
     private LayerMask moveableLayerMask;
+
+    private float MAX_MOUSE_DISTANCE = 100f;
+
     private Vector3 lastPosition;
 
     public Vector3 GetSelectedMapPosition() {
@@ -22,10 +25,11 @@ public class InputManager : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(mousePos);
 
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, 100, placementLayerMask))
+        if(Physics.Raycast(ray, out hit, MAX_MOUSE_DISTANCE, placementLayerMask))
         {
             lastPosition = hit.point;
         }
+
         return lastPosition;
     }
 
@@ -37,7 +41,7 @@ public class InputManager : MonoBehaviour
 
         RaycastHit hit;
         
-        if (Physics.Raycast(ray, out hit, 100, robotLayerMask))
+        if (Physics.Raycast(ray, out hit, MAX_MOUSE_DISTANCE, robotLayerMask))
         {
             return hit.collider.transform.gameObject;
         }
@@ -51,12 +55,12 @@ public class InputManager : MonoBehaviour
         mousePos.z = camera.nearClipPlane;
         Ray ray = camera.ScreenPointToRay(mousePos);
 
-        return Physics.Raycast(ray, 100, moveableLayerMask);
+        return Physics.Raycast(ray, MAX_MOUSE_DISTANCE, moveableLayerMask);
     }
 
     public bool IsRobot()
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        return Input.GetMouseButtonDown(0) && Physics.Raycast(ray, 100, robotLayerMask);
+        return Physics.Raycast(ray, MAX_MOUSE_DISTANCE, robotLayerMask);
     }
 }

@@ -25,7 +25,6 @@ public class PlacementSystem : MonoBehaviour
     private void Start()
     {
         InitializeRobotsPosition();
-        Debug.Log("Sarting");
     }
 
     public void InitializeRobotsPosition()
@@ -47,7 +46,7 @@ public class PlacementSystem : MonoBehaviour
 
         foreach (var position in usedPositions)
         {
-            if (position == spawnPosition)
+            if ((position - spawnPosition).sqrMagnitude < 0.1f)
             {
                 Debug.Log("Robot position exists, retrying");
                 SpawnRobot(robot);

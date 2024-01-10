@@ -20,7 +20,12 @@ public class PlacementSystem : MonoBehaviour
     /// <summary>
     /// Saved position to make sure two robots are never spawned in the same cell
     /// </summary>
-    private List<Vector3> usedPositions = new List<Vector3>();
+    private HashSet<Vector3> usedPositions = new HashSet<Vector3>();
+
+    /// <summary>
+    /// Checks if robots are spawned to clear them
+    /// </summary>
+    private bool spawned = false;
 
     private void Start()
     {
@@ -29,36 +34,35 @@ public class PlacementSystem : MonoBehaviour
 
     public void InitializeRobotsPosition()
     {
-        for (int i = 0; i < robots.Count; i++)
+        if (spawned)
         {
-            var robot = robots[i];
-            SpawnRobot(robot);
+            var spawnedRobots = GameObject.FindGameObjectsWithTag("Robot");
+            foreach (var robot in spawnedRobots)
+            {
+                Destroy(robot.transform.parent.gameObject);
+            }
+            usedPositions.Clear();
         }
 
-        usedPositions.Clear();
+        SpawnRobot();
     }
 
-    public void SpawnRobot(GameObject robot)
+    private void SpawnRobot()
     {
-        float randomX = Random.Range(-gridMaxX, gridMaxX);
-        float randomY = Random.Range(-gridMaxY, gridMaxY);
-        Vector3 spawnPosition = new Vector3(randomX, 0f, randomY);
-
-        foreach (var position in usedPositions)
+        int i = 0;
+        while (usedPositions.Count < robots.Count)
         {
-            if ((position - spawnPosition).sqrMagnitude < 0.1f)
-            {
-                Debug.Log("Robot position exists, retrying");
-                SpawnRobot(robot);
-                return;
-            }
+            float randomX = Random.Range(-gridMaxX, gridMaxX);
+            float randomY = Random.Range(-gridMaxY, gridMaxY);
+            Vector3 spawnPosition = new Vector3(randomX, 0f, randomY);
+            var robot = robots[i];
+            usedPositions.Add(spawnPosition);
+            var robotClone = Instantiate(robot, spawnPosition, Quaternion.identity);
+            var robotPosition = robotClone.transform.position;
+            var cellPosition = grid.WorldToCell(robotPosition);
+            robotClone.transform.position = grid.GetCellCenterWorld(cellPosition);
+            spawned = true;
+            i++;
         }
-
-        usedPositions.Add(spawnPosition);
-        var robotClone = Instantiate(robot, spawnPosition, Quaternion.identity);
-        var robotPosition = robotClone.transform.position;
-        
-        var cellPosition = grid.WorldToCell(robotPosition);
-        robotClone.transform.position = grid.GetCellCenterWorld(cellPosition);
     }
 }

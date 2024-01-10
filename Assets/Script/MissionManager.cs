@@ -58,7 +58,10 @@ public class MissionManager : MonoBehaviour
 
     public void NextMission()
     {
-        if(currentMissionIndex < missionTokens.Count - 1) 
+        movementCount = 0;
+        moveCountText.text = movementCount.ToString();
+
+        if (currentMissionIndex < missionTokens.Count - 1) 
         { 
             currentMissionIndex++; 
         } else

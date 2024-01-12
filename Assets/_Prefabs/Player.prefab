@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3023792963726583844}
   - component: {fileID: 420988211724871535}
   - component: {fileID: 597763212186462748}
+  - component: {fileID: 1477341735299970135}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -47,7 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f1b384fb0c9c1459f7cd82b8fd4352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedRobot: {fileID: 0}
   movementIndicator: {fileID: 3280026241726764661, guid: f4b5932242d395148aa911df81d6bdcc, type: 3}
   missionManager: {fileID: 0}
   cellIndicator: {fileID: 736238736624041846}
@@ -64,6 +64,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveCountText: {fileID: 0}
+  currentMissionImage: {fileID: 0}
+  missionTokens: []
+--- !u!114 &1477341735299970135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3023792963726583845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb2c3cb3cd0aff4f91565758a6f5cfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menu: {fileID: 0}
 --- !u!1001 &4126999262968318955
 PrefabInstance:
   m_ObjectHideFlags: 0

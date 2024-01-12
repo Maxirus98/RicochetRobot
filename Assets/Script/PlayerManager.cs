@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviour
     private InputManager inputManager;
     private Grid grid;
     private List<GameObject> movementIndicators;
+    private MenuManager menuManager;
 
     private void Awake()
     {
@@ -22,8 +23,14 @@ public class PlayerManager : MonoBehaviour
         movementIndicators = new List<GameObject>();
     }
 
+    private void Start()
+    {
+        menuManager = GetComponent<MenuManager>();
+    }
+
     private void Update()
     {
+        if (menuManager.currentGameState == GameState.Pause) return;
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         cellIndicator.transform.position = grid.CellToWorld(gridPosition);

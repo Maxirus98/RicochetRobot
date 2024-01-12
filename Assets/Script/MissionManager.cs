@@ -31,12 +31,6 @@ public class MissionManager : MonoBehaviour
         }
 
         ShuffleList(randomizedMissionList);
-
-        for (int i = 0; i < randomizedMissionList.Count; i++)
-        {
-            print(randomizedMissionList[i]);
-        }
-
     }
 
     private void ShuffleList(List<int> list)

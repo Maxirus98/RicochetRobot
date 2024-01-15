@@ -4,6 +4,8 @@ Ricochet Robot est un jeu de société fait par Alex Randolph.
 
 C'est un jeu de déduction qui consiste à trouver la route la plus courte pour se rendre à la prochaine mission.
 Une fois qu'une personne a trouvé une route, elle dit le nombre de mouvement pour que le robot se rend à la mission. 
+
+Ex: Si la mission est «Étoile rouge». Les joueurs devront trouver une route pour que le robot ROUGE se rend à la mission.
 Ensuite, les autres joueurs ont 2 minutes pour trouver une route plus courte sinon la manche est gagnée par le joueur actif.
 
 La fin de la partie se détermine lorsque toutes les missions ont été effectuées.
